@@ -18,6 +18,22 @@ from visualization import plot_three_sets
 
 
 def run_estimation(seed, n_runs, n, p, name_id, fig_save_path):
+    """
+    Simple run to estimate finite sample properties; this function is for illustration purpose of the paper
+
+    Parameters
+    ----------
+    seed: int
+    n_runs: int
+    n: int
+    p: int
+    name_id: str
+    fig_save_path:str
+
+    Returns
+    -------
+
+    """
 
     key_initial = jax.random.PRNGKey(seed)
     key_scenario, key_finite_sample = jax.random.split(key_initial, 2)
@@ -30,12 +46,6 @@ def run_estimation(seed, n_runs, n, p, name_id, fig_save_path):
     logging.info(
         ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Scenario Generation <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     alpha, beta, e, m = generate_scenario(key_sub, d, p, d)
-    # note that we overwrite alpha to be the identity matrix -> guarantees individual component identification
-    # per added instrument
-    #alpha = np.zeros((d, p))
-    #alpha[:d, :d] = np.identity(d)
-    print(alpha)
-    #beta[:3] = np.array([5, 5, -7])
     save_scenario(key_sub, alpha, beta, e, m, fig_save_path, name_id=name_id)
 
     # ----------------------------------------------------------------------------------------------------------------

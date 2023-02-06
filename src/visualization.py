@@ -12,17 +12,24 @@ from utils_plot import update_layout, plotly_colors
 
 
 def visualize_results(name_id, result_path, threshold=0.3):
+    """
+    Visualize results
+    Parameters
+    ----------
+    name_id: str
+    result_path: str
+    threshold:float
 
-    # -----------------------------------------------------------------
-    # Read in scenario
-    # -----------------------------------------------------------------
+    Returns
+    -------
+
+    """
 
     # -----------------------------------------------------------------
     # Read in optimization results
     # -----------------------------------------------------------------
     res = np.load(os.path.join(result_path, "results.npy"), allow_pickle='TRUE').item()
     results = SimpleNamespace(**res)
-    n_runs = len(results.diff_beta)
     beta_0 = np.hstack([0.0, results.beta])
 
     # -----------------------------------------------------------------
@@ -73,22 +80,25 @@ def visualize_results(name_id, result_path, threshold=0.3):
 def plot_optimization(beta_list, name_list, beta_0, idx, name_id, fig_path, type_beta="absolute", cover_list=None,
                       boxmean=True):
     """
-    plot optimization error of beta - boxplots for optimization error and benchmark, includes dotted line for
-    zeros
-
+    plot optimization
     Parameters
     ----------
-    beta_error: np.array
-        absolute error for optimization
-    beta_benchmark_error: np.array
-        absolute error of benchmark
-    beta_0: np.array
-        true beta
-    idx: list
-        indices to be displayed
-    name_id: string
-        name for saving file
-    fig_path
+    beta_list: list of ndarrays
+        list of beta to be plotted
+    name_list: list of str
+        corresponding reference names to the betas
+    beta_0: ndarray
+        true beta value
+    idx: index
+        indices to be plotted
+    name_id: str
+    fig_path: str
+    type_beta: str
+        default *absolute* (other value *error*) depending on whether the absolute beta values or beta - beta_0 is to be plotted
+    cover_list: list of ndarrays
+        list of coverage for ndarrays
+    boxmean: bool
+        whether to additionally plot the mean in the boxplots along with the median
 
     Returns
     -------
@@ -171,17 +181,24 @@ def plot_optimization(beta_list, name_list, beta_0, idx, name_id, fig_path, type
 def plot_optimization_round(beta_list, name_list, idx, name_id, fig_path, cover_list=None, threshold_cover=0.3,
                             boxmean=True, nonzero=False):
     """
-    Plot that shows the individual rounds of the sequential algorithm
 
     Parameters
     ----------
-    beta_list
-    name_list
-    idx
-    name_id
-    fig_path
-    cover_list
-
+    beta_list: list of ndarrays
+        list of beta to be plotted
+    name_list: list of str
+        corresponding reference names to the betas
+    idx: index
+        indices to be plotted
+    name_id: str
+    fig_path: str
+    cover_list: list of ndarrays
+        list of coverage for ndarrays
+    threshold_cover: float
+    boxmean: bool
+        whether to additionally plot the mean in the boxplots along with the median
+    nonzero: bool
+        whether the nonzero values are to be plotted
     Returns
     -------
 
@@ -254,6 +271,23 @@ def plot_optimization_round(beta_list, name_list, idx, name_id, fig_path, cover_
 
 
 def plot_optimization_round_norm(beta_traj, mnorm_hat, beta_0, idx, name_id, fig_path, boxmean=True):
+    """
+
+    Parameters
+    ----------
+    beta_traj: list of ndarrays
+        list of beta trajectories
+    mnorm_hat: ndarray
+    beta_0: ndarray
+    idx: index
+    name_id: str
+    fig_path: str
+    boxmean: bool
+
+    Returns
+    -------
+
+    """
 
     fig = go.Figure()
     n_runs = len(beta_traj)
@@ -324,6 +358,24 @@ def plot_optimization_round_norm(beta_traj, mnorm_hat, beta_0, idx, name_id, fig
 
 
 def plot_three_sets(res_beta123, res_beta12_3, res_beta1_2_3, beta_0, name_id, fig_path, showlegend=True, boxmean=True):
+    """
+
+    Parameters
+    ----------
+    res_beta123: list of ndarrays
+    res_beta12_3: list of ndarrays
+    res_beta1_2_3: list of ndarrays
+    beta_0: ndarray
+    name_id: str
+    fig_path: str
+    showlegend: bool
+    boxmean: bool
+
+    Returns
+    -------
+
+    """
+
     boxpoints = None
     jitter = 0.4
     n_runs = len(res_beta123)
@@ -359,7 +411,6 @@ def plot_three_sets(res_beta123, res_beta12_3, res_beta1_2_3, beta_0, name_id, f
 
     fig = update_layout(fig)
     fig.update_layout(width=1000, height=350, showlegend=True, boxmode='group')
-    # fig.show()
     fig.update_layout(legend=dict(
         orientation="h",
         yanchor="top",
@@ -368,8 +419,6 @@ def plot_three_sets(res_beta123, res_beta12_3, res_beta1_2_3, beta_0, name_id, f
         x=0.01
     ))
     fig.update_layout(showlegend=showlegend)
-    # html
-    # pdf
     fig.write_image(os.path.join(fig_path, "FiniteSample" + name_id + ".pdf"),
                     format="pdf")
     return fig

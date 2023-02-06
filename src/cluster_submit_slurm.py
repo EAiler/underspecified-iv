@@ -35,17 +35,11 @@ fixed_flags = {
 
 
 
-# Note that there's no functionality yet to do something like:
-# For param1==val1 run the following values of param2
-# and for param1==val2 run a different set of values for param2...
-
 # Some values and paths to be set
 user = "elisabath.ailer"  # CHANGE THIS
 project = "UnderspecifiedIV"
 executable = f"/home/haicu/{user}/miniconda3/envs/insufficient_iv/bin/python"  # IF YOU'RE USING MINICONDA
 run_file = f"/home/haicu/{user}/Projects/{project}/Code/src/run_optimization_slurm.py"  # MAY NEED TO UPDATE
-# THIS
-#data_dir = f"/home/haicu/{user}/{project}/data/"  # MAY NEED TO UPDATE THIS
 
 # Specify the resource requirements *per run*
 num_cpus = 4
@@ -111,9 +105,7 @@ def submit_all_jobs(args: Sequence[Dict[Text, Any]]) -> None:
     runcmd += " "
     runcmd += run_file
     # ASSUMING RUNFILE TAKES THESE THREE ARGUMENTS
-    #runcmd += f' --data_dir {data_dir}'
     runcmd += f' --fig_path {result_dir}'
-    #runcmd += f' --output_name {output_name}'
     # Sweep arguments
     for k, v in arg.items():
       runcmd += get_flag(k, v)

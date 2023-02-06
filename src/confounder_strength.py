@@ -99,38 +99,8 @@ def compute_conf_strength(beta, m, e):
 
     """
 
-    # first method to compute confounding strength
-    #diff = b - beta
-    #conf_strength_1 = diff@diff / (beta@beta + diff@diff)
-
     # second method to compute confounding strength
     prod = np.linalg.pinv(m.T).T@e
     conf_strength = prod@prod / (beta@beta + prod@prod)
-
-    return conf_strength
-
-def compute_conf_strength_2(beta, b):
-    """
-    Computation of confounding strength
-
-    Parameters
-    ----------
-    beta
-    b
-    m
-    e
-
-    Returns
-    -------
-
-    """
-
-    # first method to compute confounding strength
-    diff = b - beta
-    conf_strength = diff@diff / (beta@beta + diff@diff)
-
-    # second method to compute confounding strength
-    #prod = np.linalg.pinv(m.T).T@e
-    #conf_strength = prod@prod / (beta@beta + prod@prod)
 
     return conf_strength

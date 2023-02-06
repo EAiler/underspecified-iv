@@ -1,8 +1,4 @@
 import logging
-name_id = "20221007_Optimization_"
-log_file_id = str(name_id)+"_std.log"
-logging.basicConfig(filename=log_file_id, format='%(asctime)s %(message)s', filemode='w', level=logging.INFO)
-
 import numpy as np
 import jax
 import argparse
@@ -23,15 +19,16 @@ def run_optimization(seed, n_runs, n, p, d, d_id, d_max, n_rounds, name_id, fig_
 
     Parameters
     ----------
-    seed
-    n_runs
-    n
-    p
-    d
-    d_id
-    d_max
-    n_rounds
-    fig_save_path
+    seed: int
+    n_runs: int
+    n: int
+    p: int
+    d: int
+    d_id: int
+    d_max: int
+    n_rounds: int
+    fig_save_path: str
+        path to directory in which the results should be saved to
 
     Returns
     -------
@@ -45,11 +42,7 @@ def run_optimization(seed, n_runs, n, p, d, d_id, d_max, n_rounds, name_id, fig_
     key, key_sub = jax.random.split(key)
     logging.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Scenario Generation <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     alpha, beta, e, m = generate_scenario(key_sub, d, p, d_id)
-
-    # TODO : introduced alpha as a special case
-    #alpha = np.zeros(alpha.shape)
-    #alpha[:d, :d] = np.identity(d)
-
+    # save generated alpha, beta etc.
     save_scenario(key_sub, alpha, beta, e, m, fig_save_path, name_id=name_id)
 
     # ----------------------------------------------------------------------------------------------------------------
@@ -98,14 +91,13 @@ def run_optimization(seed, n_runs, n, p, d, d_id, d_max, n_rounds, name_id, fig_
         conf_strength = compute_conf_strength(beta, m, e)
         conf_strength_hat = estimate_conf_strength(0, x, y)
         max_norm_hat = (1 - conf_strength_hat) * beta_obs @ beta_obs
-        #max_norm_hat_intercept = (1 - conf_strength_hat) * beta_obs_intercept @ beta_obs_intercept
         max_norm = (1 - conf_strength) * beta_obs @ beta_obs
 
         key, key_sub = jax.random.split(key)
         similarity_matrix = alpha + jax.random.normal(key_sub, alpha.shape)
 
-        key, key_sub = jax.random.split(key)
         ## Initialize model "Similarity"
+        key, key_sub = jax.random.split(key)
         model = SetProposal(n_rounds,
                             budget=np.inf,
                             experiment=linear_experiment,
@@ -115,18 +107,18 @@ def run_optimization(seed, n_runs, n, p, d, d_id, d_max, n_rounds, name_id, fig_
                             key=key_sub
                             )
 
-
         # ----------------------------------------------------------------------------------------------------------------
         # 3a. Train model
         # ----------------------------------------------------------------------------------------------------------------
         model.fit()
         print(np.round(model.current_beta, 1))
         print(np.round(beta_0, 1))
+
         # ----------------------------------------------------------------------------------------------------------------
         # 3b. Train benchmark models
         # ----------------------------------------------------------------------------------------------------------------
-        key, key_sub = jax.random.split(key)
         ## Initialize model "Random"
+        key, key_sub = jax.random.split(key)
         model_benchmark = SetProposal(n_rounds,
                                       budget=np.inf,
                                       experiment=linear_experiment,
@@ -171,17 +163,6 @@ def run_optimization(seed, n_runs, n, p, d, d_id, d_max, n_rounds, name_id, fig_
 
         iter += 1
 
-        # logging information
-        from utils import projection
-        eig, _ = np.linalg.eig(projection(similarity_matrix[model.current_idxs, :len(model.current_idxs)]))
-        print("Eigenvalues: " + str(np.round(eig, 2)))
-        print("Trajectory: " + str(model._selection_trajectory))
-        print("Indices: " + str(model.current_idxs))
-
-        print("B - Trajectory: " + str(model_benchmark._selection_trajectory))
-        print("B - Indices: " + str(model_benchmark.current_idxs))
-        print("**************************** Finshed. **********************************")
-
         # ----------------------------------------------------------------------------------------------------------------
         # 5. Store results as npy-file
         # ----------------------------------------------------------------------------------------------------------------
@@ -205,6 +186,7 @@ def run_optimization(seed, n_runs, n, p, d, d_id, d_max, n_rounds, name_id, fig_
             "singlex_cover": np.array(singlex_cover),
             "diff_singlex_beta": np.array(diff_singlex_beta)
         }
+        # save results to file called "results.npy"
         np.save(os.path.join(fig_save_path, "results.npy"), save_dict)
 
 
@@ -241,13 +223,15 @@ if __name__ == '__main__':
         n_rounds)
 
     fig_save_path = os.path.join(fig_path, str(name_id))
-
     try:
         os.makedirs(fig_save_path)
     except FileExistsError:
         pass
 
+    # run optimization
     run_optimization(seed, n_runs, n, p, d, d_id, d_max, n_rounds, name_id, fig_save_path)
+
+    # visualize results
     visualize_results(name_id, fig_save_path)
 
 

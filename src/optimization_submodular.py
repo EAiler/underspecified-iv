@@ -1,6 +1,3 @@
-import logging
-import argparse
-
 import numpy as np
 import jax
 import plotly.graph_objects as go
@@ -12,10 +9,6 @@ from svd_2sls import svd_2sls, combine_svd_estimation, check_component_coverage
 from utils import generate_rv, generate_model
 
 
-
-# ---------------------------------------------------------------------------------------------------------------------
-# Optimization of Beta
-# ---------------------------------------------------------------------------------------------------------------------
 
 class Experiment:
     """ general Experiment Class """
@@ -41,7 +34,17 @@ class LinearExperiment(Experiment):
         self.M = M
 
     def run(self, lam):
-        """ perform experiment """
+        """
+        Run Experiment
+        Parameters
+        ----------
+        lam: list of boolean
+            indicate which instruments are used for the particular experiment run
+
+        Returns
+        -------
+
+        """
         self._key, _ = jax.random.split(self._key, 2)
 
         d, p = self.alpha.shape
@@ -111,7 +114,21 @@ class SetProposal:
 
 
     def _distance(self, idx_new, idx_old, type="cosine"):
-        """ compute the cosine distance """
+        """
+        compute distance based on similarity matrix
+        Parameters
+        ----------
+        idx_new: list
+            list of indices for newly selected instruments
+        idx_old: list
+            list of indices for already used instruments
+        type: str
+
+        Returns
+        -------
+        float
+
+        """
         if type == "cosine":
             mat1 = self._similarity_alpha[idx_new, :]
             mat2 = self._similarity_alpha[idx_old, :]
@@ -120,7 +137,19 @@ class SetProposal:
 
 
     def _select(self, idxs_sets):
-        """ selection function for most promising idx set """
+        """
+        selection function for most promising idx set
+        **Note**: Implementation so far are *random* and *similarity* (matrix with pairwise similarities),
+        customize if needed
+
+        Parameters
+        ----------
+        idxs_sets: list
+
+        Returns
+        -------
+        int: returns best index
+        """
 
         gains = np.zeros(len(idxs_sets), dtype='float64')
         jter = 0
@@ -150,6 +179,20 @@ class SetProposal:
 
 
     def _cost_budget(self, idx_list, budget_method="idx_length"):
+        """
+        budget computation for idx set
+        **Note**: Implementation so far are *idx_length* which means direct proportional to the number of
+        instruments, customize here if needed
+
+        Parameters
+        ----------
+        idx_list
+        budget_method
+
+        Returns
+        -------
+
+        """
         if budget_method == "idx_length":
             return len(idx_list)
         else:
@@ -157,7 +200,17 @@ class SetProposal:
 
 
     def fit(self, budget_method="idx_length"):
-        """ iteratively go through the indices and propose new sets until budget is gone """
+        """
+        Fit functionality, fit the model with the parameters defined in the instantiation of the class
+        Parameters
+        ----------
+        budget_method: str
+            default *idx_length*; cost of the experiment is the number of instruments
+
+        Returns
+        -------
+
+        """
         budget = 0.0
 
         while (budget < self._budget) & (len(self._possible_idx_sets) > 0) & (self._iter_round < self._n_rounds):

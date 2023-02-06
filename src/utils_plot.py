@@ -1,3 +1,7 @@
+"""
+File for plotting functionalities and styling constants
+"""
+
 import plotly.graph_objects as go
 
 

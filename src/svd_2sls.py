@@ -1,6 +1,6 @@
 
 import numpy as np
-from sklearn.linear_model import LinearRegression, Lasso, Ridge
+from sklearn.linear_model import LinearRegression
 import sys
 import logging
 import cvxpy as cp
@@ -111,12 +111,13 @@ def check_component_coverage(P_list, eps=0.1):
 
     Parameters
     ----------
-    P_list
+    P_list: list of ndarrays
 
     Returns
     -------
     vec
     """
+
     P_union = np.hstack([proj for proj in P_list])
     U, D, _ = np.linalg.svd(P_union)
     rank_D = (D > eps).sum()
@@ -124,7 +125,6 @@ def check_component_coverage(P_list, eps=0.1):
     U_col = U[:, :rank_D]
     P_col = U_col@U_col.T
     p, _ = P_col.shape
-    #return np.diag(P_col)
 
     # compute the angle between the two vectors
     cover = []
@@ -133,37 +133,3 @@ def check_component_coverage(P_list, eps=0.1):
         cover.append(p_vec[jter] / np.sqrt(p_vec@p_vec))
 
     return np.arccos(cover)
-
-
-
-def svd_2sls_pseudoinverse(x, y, z, max_iv=2, eps=0.01):
-
-    ## Computation of projection matrices for further computation purposes
-    def projection(P1):
-        return P1 @ np.linalg.solve(P1.T @ P1, P1.T)
-
-    ## First stage regression
-    reg1 = LinearRegression(fit_intercept=True).fit(z, x)
-    xhat = np.hstack([np.ones(x.shape[0])[..., np.newaxis], reg1.predict(z)])
-
-    ## Singular value decomposition of the first step
-    U, D, VT = np.linalg.svd(xhat)
-
-    ## Preparation of variables, Truncation
-    rank_D = np.min([(D > eps).sum(), max_iv + 1])
-    U1, D1, VT1 = U[:, :rank_D], D[:rank_D], VT[:rank_D, :]
-    VT1_comp = VT[rank_D:, :]
-    VT1 = VT[:rank_D, :]
-
-    ## Computation of beta estimate
-    zz = np.hstack([np.ones(z.shape[0])[..., np.newaxis], z])
-    xx = np.hstack([np.ones(x.shape[0])[..., np.newaxis], x])
-    vec_scale = (xx.T@projection(zz)@xx)
-    beta_est = np.linalg.pinv(vec_scale)@xx.T@projection(zz)@y
-    V1_comp = VT1_comp.T
-    V1 = VT1.T
-
-    P1_comp = projection(V1_comp)
-    P1 = projection(V1)
-
-    return beta_est, P1, P1_comp

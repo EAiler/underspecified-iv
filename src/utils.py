@@ -9,7 +9,6 @@ from jax import numpy as jnp
 import jax
 from jax import random
 import sys
-import pickle
 import os
 
 from scipy.spatial.distance import cdist
@@ -17,7 +16,19 @@ sys.path.insert(0, "../src")
 
 
 def projection(P1):
+    """
+    computation of projection matrix
+
+    Parameters
+    ----------
+    P1: ndarray
+
+    Returns
+    -------
+    ndarray
+    """
     return P1 @ np.linalg.solve(P1.T @ P1, P1.T)
+
 
 def cosine_distance(mat1, mat2):
     """
@@ -30,7 +41,7 @@ def cosine_distance(mat1, mat2):
 
     Returns
     -------
-    int
+    float
 
     """
 
@@ -225,14 +236,6 @@ def generate_model(alpha, beta, z, u, e, M, lam, error_model="simple"):
         c_x = u@M
         c_y = u@e
 
-    #if error_model == "nonzeromean":
-    #    # more elaborate noise model
-    #    e_perturb = e + 1.0 * u
-    #    e_perturb = e_perturb / np.linalg.norm(e_perturb, axis=1)[..., np.newaxis]
-    #    c_factor = np.random.normal(1)
-    #    c_y = c_factor
-    #    c_x = c_factor * e_perturb
-
     x = z @ alpha + c_x
     y = x @ beta + c_y
 
@@ -268,8 +271,6 @@ def save_scenario(key, alpha, beta, e, m, save_path, name_id="scen"):
     }
 
     name = str(name_id)+ ".npy"
-    #with open(os.path.join(save_path, name), 'wb') as handle:
-    #    pickle.dump(save_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
     np.save(os.path.join(save_path, name), save_dict)
     return save_dict
 
