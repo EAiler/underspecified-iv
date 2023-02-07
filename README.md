@@ -10,7 +10,7 @@ cd underspecified-iv
 ```
 
 The code runs on *Python 3.9*. 
-We recommend to create a new environment and to install the packages in the ``requirements.txt`` file.
+We recommend to create a new environment and to install the packages in the ``spec-file.txt`` file.
 ```
 conda create -n underspecified_iv python=3.9
 conda install -n underspecified_iv --file spec-file.txt
