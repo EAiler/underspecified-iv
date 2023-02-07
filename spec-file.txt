@@ -1,0 +1,41 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+@EXPLICIT
+https://repo.anaconda.com/pkgs/main/osx-64/blas-1.0-mkl.conda
+https://repo.anaconda.com/pkgs/main/osx-64/ca-certificates-2022.07.19-hecd8cb5_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/intel-openmp-2021.4.0-hecd8cb5_3538.conda
+https://repo.anaconda.com/pkgs/main/osx-64/libcxx-14.0.6-h9765a3e_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/libgfortran-3.0.1-h93005f0_2.conda
+https://repo.anaconda.com/pkgs/main/osx-64/libuv-1.40.0-haf1e3a3_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/ncurses-6.3-hca72f7f_3.conda
+https://repo.anaconda.com/pkgs/main/noarch/tzdata-2022e-h04d1e81_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/xz-5.2.6-hca72f7f_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/zlib-1.2.13-h4dc903c_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/icu-68.1-h23ab428_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/libffi-3.3-hb1e8313_2.conda
+https://repo.anaconda.com/pkgs/main/osx-64/mkl-2021.4.0-hecd8cb5_637.conda
+https://repo.anaconda.com/pkgs/main/osx-64/openssl-1.1.1q-hca72f7f_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/readline-8.2-hca72f7f_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/tk-8.6.12-h5d9f67b_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/nodejs-16.13.1-h470481b_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/sqlite-3.39.3-h707629a_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/python-3.9.7-h88f2d9e_1.conda
+https://repo.anaconda.com/pkgs/main/osx-64/absl-py-1.3.0-py39hecd8cb5_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/certifi-2022.9.24-py39hecd8cb5_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/python-flatbuffers-2.0-pyhd3eb1b0_0.conda
+https://conda.anaconda.org/conda-forge/osx-64/python_abi-3.9-2_cp39.tar.bz2
+https://repo.anaconda.com/pkgs/main/noarch/six-1.16.0-pyhd3eb1b0_1.conda
+https://repo.anaconda.com/pkgs/main/osx-64/typing_extensions-4.3.0-py39hecd8cb5_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/wheel-0.37.1-pyhd3eb1b0_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/mkl-service-2.4.0-py39h9ed2024_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/setuptools-63.4.1-py39hecd8cb5_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/numpy-base-1.21.5-py39h3b1a694_3.conda
+https://repo.anaconda.com/pkgs/main/osx-64/pip-22.2.2-py39hecd8cb5_0.conda
+https://repo.anaconda.com/pkgs/main/noarch/opt_einsum-3.3.0-pyhd3eb1b0_1.conda
+https://repo.anaconda.com/pkgs/main/osx-64/mkl_fft-1.3.1-py39h4ab4a9b_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/mkl_random-1.2.2-py39hb2f4e1b_0.conda
+https://repo.anaconda.com/pkgs/main/osx-64/numpy-1.21.5-py39h2e5f0a9_3.conda
+https://repo.anaconda.com/pkgs/main/osx-64/scipy-1.7.3-py39h8c7af03_0.conda
+https://conda.anaconda.org/conda-forge/osx-64/jaxlib-0.1.74-py39h757cd7f_0.tar.bz2
+https://conda.anaconda.org/conda-forge/noarch/jax-0.2.26-pyhd8ed1ab_0.tar.bz2
